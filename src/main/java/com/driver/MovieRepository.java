@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class MovieRepository {
 
     // creating database using HashMap <MovieName, Movie object>
-    HashMap<String, Movie> movieDB = new HashMap<>();
+    HashMap<String, Object> movieDB = new HashMap<>();
 
     String addMovieToDB(Movie movie)
     {
@@ -20,10 +20,11 @@ public class MovieRepository {
 
     String addDirectorToDB(Director director)
     {
-       // String key = Director.getName();
-       // movieDB.put(key,Movie);
+        String key = director.getName();
+        movieDB.put(key,director);
 
         return "Director added successfully..";
     }
+    String
 
 }

@@ -9,11 +9,19 @@ public class MovieService {
     @Autowired
     MovieRepository movieRepositoryObj;       // created object of MovieRepository class by @Autowired
 
-   String addMovieToRepo(Movie movie)
+   String addMovieToservice(Movie movie)
    {
        String repoResult = movieRepositoryObj.addMovieToDB(movie);
          // adding movie to database
        return repoResult;
    }
+
+    String addDirectorToservice(Director director)
+    {
+        String repoResult = movieRepositoryObj.addDirectorToDB(director);
+        // adding movie to database
+        return repoResult;
+    }
+
 
 }
