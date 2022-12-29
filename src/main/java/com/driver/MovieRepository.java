@@ -4,17 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
 
 @Repository
 public class MovieRepository {
-    HashMap<String,Movie> movieDB = new HashMap<>();
+    HashMap<String,Movie> movieDB ;
        // created Movie database using HashMap <MovieName, Movie object>
-    HashMap<String,Director> directorDB = new HashMap<>();
+    HashMap<String,Director> directorDB ;
         // created director database using HashMap <MovieName, Movie object>
-    HashMap<String, ArrayList<String>> directorMovieList = new HashMap<>();
-          // store movies names which made by particular director
+    HashMap<String, List<String>> directorMovieList;
+          // store movies names list which made by particular director
+    public MovieRepository() {
+        this.movieDB = new HashMap<String,Movie>();
+        this.directorDB = new HashMap<String,Director>();
+        this.directorMovieList = new HashMap<String, List<String>>();
+    }
 
     //Add a movie
     String addMovieToDB(Movie movie)
@@ -35,28 +41,28 @@ public class MovieRepository {
 // add by director name and movie list of that director
     String addDirect_movieToDB(String movieName, String directorName)
     {
-        if (directorMovieList.containsKey(directorName))
+        if (directorDB.containsKey(directorName) && movieDB.containsKey(movieName))
         {
-            ArrayList<String> t = directorMovieList.get(directorName);
-            t.add(movieName);
-            directorMovieList.put(directorName, t);
+            if (directorMovieList.containsKey(directorName)) // if director name & list of movies already present
+            {
+                List<String> t = directorMovieList.get(directorName);
+                t.add(movieName);
+                directorMovieList.put(directorName, t);
+            }
+            else {
+                List<String> a = new ArrayList<>();  // new list,
+                a.add(movieName);
+                directorMovieList.put(directorName, a);
+            }
+            return "successfully added ..movie - director pair added";
         }
-        else {
-            ArrayList<String> a = new ArrayList<>();
-            a.add(movieName);
-            directorMovieList.put(directorName, a);
-        }
-       return "movie - director pair added";
+        else return null;
     }
 //Get Movie by movie name
     Movie getMovieByMovieNameFromDB(String name)
     {
-        for(String movieN : movieDB.keySet())
-        {
-            if(name.equals(movieN))
-                return movieDB.get(movieN);
-        }
-        return null;
+        if (movieDB.containsKey(name)) return movieDB.get(name);
+        else return null;
     }
 //Get Director by Director name
     Director getDirectorByNameFromDB(String name)
@@ -69,17 +75,19 @@ public class MovieRepository {
         return null;
     }
 //Get List of movies name for a given director name
-    ArrayList<String> getByDirectorMovieList(String name)
+    List<String> getByDirectorMovieList(String name)
     {
-        return directorMovieList.get(name);
+        List<String> moviesList = new ArrayList<String>();
+        if(directorMovieList.containsKey(name)) moviesList = directorMovieList.get(name);
+        return moviesList;
     }
 //Get List of all movies added
-    ArrayList<String> getListAllOfMovies()
+   public List<String> getListAllOfMovies()
     {
-        ArrayList<String> list = new ArrayList<>();
+       List<String> list = new ArrayList<>();
         for (String s: movieDB.keySet())
         {
-            list.add(s);
+           list.add(s);
         }
         return list;
     }
@@ -87,7 +95,7 @@ public class MovieRepository {
     String deleteDirectorByNameFromDB(String name)
     {
         directorDB.remove(name);
-        ArrayList<String> temp = directorMovieList.get(name);
+        List<String> temp = directorMovieList.get(name);
         directorMovieList.remove(name);
         for(int i =0;i<temp.size();i++)
         {
@@ -97,5 +105,23 @@ public class MovieRepository {
             }
         }
         return "Successfully Deleted a director and its movies from the records";
+    }
+//Delete all directors and all movies by them from the records
+    String deleteAllDirectors()
+    {
+        for(String s: directorDB.keySet())
+        {
+            if(directorMovieList.containsKey(s)) // check if director present
+            {
+                List<String> temp = directorMovieList.get(s); //
+                for(int i=0;i<temp.size();i++)   // delete all movies which are in movieNameList
+                {
+                    movieDB.remove(i);// delete all movies which are by this director
+                }
+                directorMovieList.remove(s);
+            }
+            directorDB.remove(s); // delete director from db
+        }
+        return "successfully Deleted all directors and all movies by them from the records  ";
     }
 }
