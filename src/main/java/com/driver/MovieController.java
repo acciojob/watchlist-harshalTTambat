@@ -47,10 +47,7 @@ public class MovieController {
     public ResponseEntity<Movie> getMovieByName(@PathVariable String name)
     {
         Movie response = movieServiceObj.getMovieByName(name);
-        if (response == null)
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-
-        else return new ResponseEntity<>(response,HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
 //get director by name
@@ -58,9 +55,6 @@ public class MovieController {
     public ResponseEntity<Director> getDirectorByName(@PathVariable String name)
     {
         Director response = movieServiceObj.getDirectorByName(name);
-        if (response == null)
-            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
-
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 

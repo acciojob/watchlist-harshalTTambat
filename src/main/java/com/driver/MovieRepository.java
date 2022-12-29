@@ -10,17 +10,12 @@ import java.util.HashMap;
 
 @Repository
 public class MovieRepository {
-    HashMap<String,Movie> movieDB ;
+    HashMap<String,Movie> movieDB = new HashMap<>();
        // created Movie database using HashMap <MovieName, Movie object>
-    HashMap<String,Director> directorDB ;
+    HashMap<String,Director> directorDB = new HashMap<>();
         // created director database using HashMap <MovieName, Movie object>
-    HashMap<String, List<String>> directorMovieList;
+    HashMap<String, List<String>> directorMovieList = new HashMap<>();
           // store movies names list which made by particular director
-    public MovieRepository() {
-        this.movieDB = new HashMap<String,Movie>();
-        this.directorDB = new HashMap<String,Director>();
-        this.directorMovieList = new HashMap<String, List<String>>();
-    }
 
     //Add a movie
     String addMovieToDB(Movie movie)
